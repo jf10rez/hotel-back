@@ -1,4 +1,5 @@
 
+const { response } = require("express");
 const Image = require("../models/ImageModel");
 
 
@@ -35,66 +36,31 @@ const storeImage = async( req, res = response ) => {
 
 }
 
-// const storeImage = async( req, res = response ) => {
+const imagesByRoom = async( req, res = response ) => {
 
-//     if (!req.files 
-//         || Object.keys(req.files).length === 0
-//         || !req.files.image
-//         ) {
-//         res.status(400).json({
-//             ok: false,
-//             message: 'Debe seleccionar un archivo'
-//         });
-//         return;
-//     }
+    const idRoom  = req.params.idRoom
+    try {
 
-//     // console.log(req.files.image); return
-//     const { image } = req.files;
+        const imagesById = await Image.find({ idRoom })
 
-//     // console.log(image); return
+        console.log(imagesById)
 
-//     const uploadPath =  path.join( __dirname, '../uploads/', image.name );
+        res.status(200).json({
+          ok: true,
+          images: imagesById
+        })
 
-//     // console.log( uploadPath ); return
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+          ok: false,
+          message: 'Se produjo un error con el servidor'
+        })
+    }
 
-//     image.mv(uploadPath, async(err) => {
-//         if (err) {
-//             return res.status(500).json({
-//                 ok: false,
-//                 message: 'Se produjo un error en el servidor'
-//             });
-//         }
-
-//         const { idRoom, name } = req.body
-
-//         // const roomExist = await Image.find({ idRoom })
-        
-//         // if( !roomExist ){
-//         //     return res.status(400).json({
-//         //         ok: false,
-//         //         message: 'No se encontró la habitación'
-//         //     })
-//         // }
-
-//         const image = new Image({
-//             name,
-//             idRoom,
-//             image: {
-//                 data: req.files.image.data,
-//                 contentType: uploadPath
-//             }
-//         })
-
-//         const imageSave = await image.save()
-
-//         res.status(200).json({
-//             ok: true,
-//             message: 'La imagén se guardó correctamente',
-//             imageSave
-//         })
-//     });
-// }
+}
 
 module.exports = {
-    storeImage
+    storeImage,
+    imagesByRoom
 }
