@@ -7,7 +7,6 @@ const storeImage = async( req, res = response ) => {
     const { idRoom } = req.body
     Promise.all(
         req.files.map(async (file) => {
-            console.log(file)
           const newImage = new Image({
             name: file.originalname,
             idRoom: idRoom,
