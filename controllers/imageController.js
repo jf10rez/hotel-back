@@ -43,8 +43,6 @@ const imagesByRoom = async( req, res = response ) => {
 
         const imagesById = await Image.find({ idRoom })
 
-        console.log(imagesById)
-
         res.status(200).json({
           ok: true,
           images: imagesById
