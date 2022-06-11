@@ -25,26 +25,31 @@ const getReserves = async( req, res = response ) => {
 
 const createReserve = async( req, res = response ) => {
 
-    const reserves = new Reserve( req.body )
+    // console.log( req.body )
 
-    try {
+    // res.status(200).json({
+    //     ok: true
+    // })
+    // const reserves = new Reserve( req.body )
+
+    // try {
         
-        reserves.user = req.uid
+    //     reserves.user = req.uid
 
-        const reserveSave = await reserves.save()
+    //     const reserveSave = await reserves.save()
 
-        res.status(200).json({
-            ok: true,
-            reserve: reserveSave
-        })
+    //     res.status(200).json({
+    //         ok: true,
+    //         reserve: reserveSave
+    //     })
 
-    } catch (error) {
-        console.log( error )
-        res.status(500).json({
-            ok: false,
-            message: 'Se produjo un error con el servidor'
-        })
-    }
+    // } catch (error) {
+    //     console.log( error )
+    //     res.status(500).json({
+    //         ok: false,
+    //         message: 'Se produjo un error con el servidor'
+    //     })
+    // }
 
 }
 
