@@ -58,7 +58,90 @@ const imagesByRoom = async( req, res = response ) => {
 
 }
 
+const deleteImage = async( req, res = response ) => {
+
+    try {
+
+        const { id } = req.params
+
+        const imageDelete = await Image.findByIdAndDelete( id )
+
+        res.status(200).json({
+          ok: true,
+          imageDelete
+        })
+
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+          ok: false,
+          message: 'Se produjo un error en el servidor'
+        })
+    }
+
+}
+
+// const updateImage = async( req, res = response ) => {
+
+//     const { id, idRoom } = req.body
+//     try {
+
+//       if( id ){// Update image
+//         const imageById = await Image.findById( id )
+
+//         if( !imageById ){
+//           res.status(400).json({
+//             ok: false,
+//             message: 'El id de la imagen no existe'
+//           })
+//           return
+//         }
+
+//         if( !req.file ){
+//           res.status(400).json({
+//             ok: false,
+//             message: 'No se envió ninguna imagen'
+//           })
+//         }
+        
+//         const updateImage = {
+//             name: req.file.originalname,
+//             idRoom,
+//             image: {
+//               data: req.file.filename,
+//               contentType: req.file.mimetype
+//             }
+//         }
+
+//         const imageUpdated = await Image.findByIdAndUpdate( id, updateImage, { new: true } )
+
+//         res.status(200).json({
+//           ok: true,
+//           imageUpdated
+//         })
+//         return
+//       }else{ // Add new image for this room
+
+//           console.log( idRoom )
+//           res.status(200).json({
+//             ok: true,
+//             message: 'Se actualizaron las imagenes correctamente.'
+//           })
+//         }
+
+//     } catch (error) {
+//         console.log(error)
+//         res.status(500).json({
+//           ok: false,
+//           message: 'Se produjo un error con el servidor'
+//         })
+//     }
+
+// }
+
 module.exports = {
     storeImage,
-    imagesByRoom
+    imagesByRoom,
+    deleteImage
 }
