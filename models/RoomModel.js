@@ -7,15 +7,19 @@ const RoomSchema = Schema({
         required: true
     },
     description: {
-        type: String,
-        required: true
+        type: String
     },
     price: {
         type: Number,
         required: true
     },
     ocupationMax: {
-        type: Date,
+        type: Number,
+        required: true
+    },
+    user:{
+        type: Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     }
 })
