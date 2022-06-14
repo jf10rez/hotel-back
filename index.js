@@ -30,6 +30,7 @@ app.use( express.json() )
 app.use('/api/auth', require('./routes/authRoute'))
 app.use('/api/reserve', require('./routes/reserveRoute'))
 app.use('/api/image', require('./routes/imageRoutes'))
+app.use('/api/room', require('./routes/roomRoute'))
 
 //Escuchar peticiones
 app.listen(process.env.PORT, () => {
