@@ -22,11 +22,6 @@ const ReserveSchema = Schema({
         type: Date,
         required: true
     },
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
     room: {
         type: Schema.Types.ObjectId,
         ref: 'Room',
