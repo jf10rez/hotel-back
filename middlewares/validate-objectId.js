@@ -3,7 +3,12 @@ const {ObjectId} = require('mongodb');
 
 const validateObjectId = ( req, res = response, next ) => {
 
-    if( !ObjectId.isValid(req.params.idRoom) )
+    const param = Object.keys(req.params)
+
+    //Desestructuración dinámica
+    const { [param]: id } = req.params
+    
+    if( !ObjectId.isValid(id) )
     return res.status(400).json({
         ok: false,
         errors: 'El id ingresado no es valido'
