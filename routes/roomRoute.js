@@ -3,7 +3,7 @@ const router= Router()
 const { check } = require('express-validator')
 
 
-const { createRoom, updateRoom, getRooms } = require("../controllers/roomController")
+const { createRoom, updateRoom, getRooms, deleteRoom } = require("../controllers/roomController")
 
 //Middlewares;
 const { validateFields } = require("../middlewares/validate-fields");
@@ -36,5 +36,7 @@ router.put(
     ],
     updateRoom
 )
+
+router.delete( '/:idRoom', validateObjectId, deleteRoom )
 
 module.exports = router

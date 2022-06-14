@@ -93,8 +93,50 @@ const getRooms = async( req, res = response ) => {
 
 }
 
+const deleteRoom = async( req, res = response ) => {
+
+    const idRoom = req.params.idRoom
+
+    try {
+        
+        const room = await Room.findById( idRoom )
+
+        if( !room ){
+            res.status(404).json({
+                ok: false,
+                message: 'No se encontró la habitación'
+            })
+            return;
+        }
+
+        if( room.user.toString() !== req.uid ){
+            res.status(401).json({
+                ok: false,
+                message: 'El usuario no puede eliminar esta habitación'
+            })
+        }
+
+        await Room.findByIdAndDelete( idRoom )
+
+        res.status(200).json({
+            ok: true,
+            message: 'Se eliminó la habitación con éxito',
+            room: idRoom
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            ok: false,
+            message: 'Se produjo un error con el servidor'
+        })
+    }
+
+}
+
 module.exports = {
     createRoom,
     updateRoom,
-    getRooms
+    getRooms,
+    deleteRoom
 }
