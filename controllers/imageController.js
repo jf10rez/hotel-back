@@ -10,7 +10,7 @@ const storeImage = async( req, res = response ) => {
         req.files.map(async (file) => {
           const newImage = new Image({
             name: file.originalname,
-            idRoom: idRoom,
+            room: idRoom,
             image: {
                 data: file.filename,
                 contentType: file.mimetype

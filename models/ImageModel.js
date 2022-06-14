@@ -6,13 +6,14 @@ const ImageSchema = Schema({
         type: String,
         required: true
     },
-    idRoom: {
-        type: String,
-        required: true  
-    },
     image: {
         data: Buffer,
         contentType: String
+    },
+    room: {
+        type: Schema.Types.ObjectId,
+        ref: 'Room',
+        required: true
     }
 })
 
