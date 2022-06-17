@@ -1,7 +1,8 @@
 const express = require("express");
-var cors = require('cors')
-// const fileUpload = require('express-fileupload')
 const { dbConnection } = require("./database/config");
+const cors = require('cors')
+const cloudinary = require('cloudinary').v2
+// const fileUpload = require('express-fileupload')
 
 require ('dotenv').config();
 
@@ -25,6 +26,13 @@ app.use( express.json() )
 //     useTempFiles : true,
 //     tempFileDir : '/tmp/'
 // }));
+
+//Configuration cloudinary for images
+cloudinary.config({ 
+    cloud_name: 'dmoxyzhdf', 
+    api_key: process.env.API_KEY_CLOUDINARY, 
+    api_secret: process.env.API_SECRET_CLOUDINARY
+  });
 
 //Rutas
 app.use('/api/auth', require('./routes/authRoute'))
