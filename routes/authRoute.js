@@ -6,10 +6,12 @@ const { Router } = require('express')
 const router = Router()
 const { check } = require('express-validator')
 
+const { loginUser, revalidateToken } = require('../controllers/authController')
+
 //Middlewares
 const { validateFields } = require('../middlewares/validate-fields')
+const { validateJWT } = require('../middlewares/validate-jwt')
 
-const { loginUser } = require('../controllers/authController')
 
 router.post( 
     '/',
@@ -18,6 +20,9 @@ router.post(
         check('password', 'La contraseña es obligatoria obligatoria').not().isEmpty(),
         validateFields
     ], 
-    loginUser )
+    loginUser 
+)
+
+router.get('/renew', validateJWT , revalidateToken)
 
 module.exports = router
