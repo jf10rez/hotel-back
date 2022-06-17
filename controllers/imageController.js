@@ -3,38 +3,38 @@ const { response } = require("express");
 const Image = require("../models/ImageModel");
 
 
-const storeImage = async( req, res = response ) => {
+// const storeImage = async( req, res = response ) => {
 
-    const { idRoom } = req.body
-    Promise.all(
-        req.files.map(async (file) => {
-          const newImage = new Image({
-            name: file.originalname,
-            room: idRoom,
-            image: {
-                data: file.filename,
-                contentType: file.mimetype
-            }
-          });
+//     const { idRoom } = req.body
+//     Promise.all(
+//         req.files.map(async (file) => {
+//           const newImage = new Image({
+//             name: file.originalname,
+//             room: idRoom,
+//             image: {
+//                 data: file.filename,
+//                 contentType: file.mimetype
+//             }
+//           });
     
-          return await newImage.save();
-        })
-      )
-        .then(res.status(201).json({
-            ok: true,
-            message: 'La foto subió exitosamente'
-        }))
-        .catch((e) => {
-            console.log(e)
-          res
-            .status(500)
-            .json({
-                ok: false,
-                message: 'Se ha presentado un error en el servidor'
-            });
-        });
+//           return await newImage.save();
+//         })
+//       )
+//         .then(res.status(201).json({
+//             ok: true,
+//             message: 'La foto subió exitosamente'
+//         }))
+//         .catch((e) => {
+//             console.log(e)
+//           res
+//             .status(500)
+//             .json({
+//                 ok: false,
+//                 message: 'Se ha presentado un error en el servidor'
+//             });
+//         });
 
-}
+// }
 
 const imagesByRoom = async( req, res = response ) => {
 
@@ -82,66 +82,37 @@ const deleteImage = async( req, res = response ) => {
 
 }
 
-// const updateImage = async( req, res = response ) => {
+const uploadImageToCloud = async( req, res = response ) => {
 
-//     const { id, idRoom } = req.body
-//     try {
+  const { idRoom } = req.body
+  
+  try {
+    
+    const newImage = new Image({
+      name: req.file.originalname,
+      path: req.file.path,
+      room: idRoom
+    })
 
-//       if( id ){// Update image
-//         const imageById = await Image.findById( id )
+    const imageSave = await newImage.save();
+     
+    res.status(201).json({
+      ok: true,
+      image: imageSave
+    })
 
-//         if( !imageById ){
-//           res.status(400).json({
-//             ok: false,
-//             message: 'El id de la imagen no existe'
-//           })
-//           return
-//         }
+  } catch (error) {
+      console.log(error)
+      res.status(500).json({
+        ok: false,
+        message: 'Se produjo un error con el servidor'
+      })
+  }
 
-//         if( !req.file ){
-//           res.status(400).json({
-//             ok: false,
-//             message: 'No se envió ninguna imagen'
-//           })
-//         }
-        
-//         const updateImage = {
-//             name: req.file.originalname,
-//             idRoom,
-//             image: {
-//               data: req.file.filename,
-//               contentType: req.file.mimetype
-//             }
-//         }
-
-//         const imageUpdated = await Image.findByIdAndUpdate( id, updateImage, { new: true } )
-
-//         res.status(200).json({
-//           ok: true,
-//           imageUpdated
-//         })
-//         return
-//       }else{ // Add new image for this room
-
-//           console.log( idRoom )
-//           res.status(200).json({
-//             ok: true,
-//             message: 'Se actualizaron las imagenes correctamente.'
-//           })
-//         }
-
-//     } catch (error) {
-//         console.log(error)
-//         res.status(500).json({
-//           ok: false,
-//           message: 'Se produjo un error con el servidor'
-//         })
-//     }
-
-// }
+}
 
 module.exports = {
-    storeImage,
     imagesByRoom,
-    deleteImage
+    deleteImage,
+    uploadImageToCloud
 }
