@@ -9,7 +9,7 @@ const getReserves = async( req, res = response ) => {
     try {
         
         const reserves = await Reserve.find( {user: req.uid} )
-                                        .populate('username')
+                                        .populate('room')
 
         res.status(200).json({
             ok: true,
