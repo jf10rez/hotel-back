@@ -15,11 +15,11 @@ const ReserveSchema = Schema({
         required: true
     },
     dateInitial: {
-        type: Date,
+        type: String,
         required: true
     },
     dateFinal: {
-        type: Date,
+        type: String,
         required: true
     },
     user: {

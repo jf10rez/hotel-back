@@ -27,7 +27,7 @@ const getReserves = async( req, res = response ) => {
 
 const createReserve = async( req, res = response ) => {
 
-    const { room, dateInitial } = req.body
+    const { room, dateInitial, dateFinal } = req.body
 
     try {
 
@@ -41,6 +41,10 @@ const createReserve = async( req, res = response ) => {
             })
             return
         }
+
+        //establish format for dates
+        req.body.dateInitial = dayjs(dateInitial).format('YYYY/MM/DD')
+        req.body.dateFinal = dayjs(dateFinal).format('YYYY/MM/DD')
 
         const reserves = new Reserve( req.body )
 
