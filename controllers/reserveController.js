@@ -45,10 +45,13 @@ const createReserve = async( req, res = response ) => {
         const reserves = new Reserve( req.body )
 
         const reserveSave = await reserves.save()
+        
+        const roomReserve = await Reserve.findById( reserveSave.id )
+                                            .populate('room')
 
         res.status(200).json({
             ok: true,
-            reserve: reserveSave
+            reserve: roomReserve
         })
 
     } catch (error) {
