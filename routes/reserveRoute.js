@@ -32,7 +32,8 @@ router.post(
         check('dateFinal', 'El dateFinal es obligatorio').custom( isDate ),
         check('user', 'El user no es valido').custom( isObjectId ),
         check('room', 'El room no es valido').custom( isObjectId ),
-        validateFields
+        validateFields,
+        validateJWT
     ]
     ,
     createReserve )
