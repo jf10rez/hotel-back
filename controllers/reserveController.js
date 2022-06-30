@@ -2,6 +2,7 @@ const { response } = require('express')
 const dayjs = require("dayjs")
 
 const Reserve = require('../models/ReserveModel')
+const { getDatesInRange } = require('../helpers/datesInRange')
 
 
 const getReserves = async( req, res = response ) => {
@@ -169,9 +170,34 @@ const deleteReserve = async( req, res = response ) => {
 
 }
 
+const getDatesUnavailable = async( req, res = response ) => {
+
+    const { id } = req.params
+
+    try {
+        
+        const { dateInitial, dateFinal } = await Reserve.findById( id )
+
+        const dates = getDatesInRange( dateInitial, dateFinal )
+        res.status(200).json({
+            ok: true,
+            dates
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            ok: false,
+            message: 'Se produjo un error con el servidor'
+        })
+    }
+
+}
+
 module.exports = {
     getReserves,
     createReserve,
     updateReserve,
-    deleteReserve
+    deleteReserve,
+    getDatesUnavailable
 }

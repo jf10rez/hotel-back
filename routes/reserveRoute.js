@@ -9,7 +9,8 @@ const {
     getReserves, 
     createReserve, 
     updateReserve, 
-    deleteReserve 
+    deleteReserve, 
+    getDatesUnavailable
 } = require('../controllers/reserveController')
 
 //Middlewares
@@ -56,5 +57,6 @@ router.put(
     )
 
     router.delete( '/:id', [validateJWT, validateObjectId], deleteReserve )
+    router.get( '/dates/:id', [validateJWT, validateObjectId], getDatesUnavailable )
 
 module.exports = router
