@@ -31,8 +31,11 @@ const createReserve = async( req, res = response ) => {
 
     try {
 
+        const dateInitialFormat = dayjs(dateInitial).format('YYYY/MM/DD')
+        const dateFinalFormat = dayjs(dateFinal).format('YYYY/MM/DD')
+
         //exist reserve in this room?
-        const existReserve = await Reserve.find( { room, dateInitial } )
+        const existReserve = await Reserve.find( { room, dateInitial: dateInitialFormat } )
 
         if( existReserve.length > 0 ){
             res.status(412).json({
@@ -43,8 +46,8 @@ const createReserve = async( req, res = response ) => {
         }
 
         //establish format for dates
-        req.body.dateInitial = dayjs(dateInitial).format('YYYY/MM/DD')
-        req.body.dateFinal = dayjs(dateFinal).format('YYYY/MM/DD')
+        req.body.dateInitial = dateInitialFormat
+        req.body.dateFinal = dateFinalFormat
 
         const reserves = new Reserve( req.body )
 
