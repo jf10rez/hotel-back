@@ -3,6 +3,7 @@ const dayjs = require("dayjs")
 
 const Reserve = require('../models/ReserveModel')
 const { getDatesInRange } = require('../helpers/datesInRange')
+const { simplifyArray } = require('../helpers/simplifyArray')
 
 
 const getReserves = async( req, res = response ) => {
@@ -34,6 +35,15 @@ const createReserve = async( req, res = response ) => {
 
         const dateInitialFormat = dayjs(dateInitial).format('YYYY/MM/DD')
         const dateFinalFormat = dayjs(dateFinal).format('YYYY/MM/DD')
+
+        const differenceDates = dayjs(dateInitial).diff(dayjs(dateFinal))
+
+        if( differenceDates >= 0 ){
+            return res.status(400).json({
+                ok: false,
+                message: 'La fecha final no puede ser menor o igual a la inicial'
+            })
+        }
 
         //exist reserve in this room?
         const existReserve = await Reserve.find( { room, dateInitial: dateInitialFormat } )
@@ -176,13 +186,39 @@ const getDatesUnavailable = async( req, res = response ) => {
 
     try {
         
-        const { dateInitial, dateFinal } = await Reserve.findById( id )
+        const reserve = await Reserve.find({room: id})
 
-        const dates = getDatesInRange( dateInitial, dateFinal )
-        res.status(200).json({
-            ok: true,
-            dates
-        })
+        if( reserve.length <= 0 ){
+            return res.status(200).json({
+                ok: true,
+                dates: [],
+                message: 'No existen reservas para esa habitación'
+            })
+        }
+
+        const searchDates = new Promise( (resolve) => {
+            const dates = reserve.map( dates => {
+                return getDatesInRange( dates.dateInitial, dates.dateFinal )
+            } )
+            resolve(dates)
+        } )
+
+        Promise.all([searchDates]).then( data => {
+
+            const dates = simplifyArray(data[0])
+
+            res.status(200).json({
+                ok: true,
+                dates
+            })
+        } ).catch( error =>{
+            console.log(error)
+            res.status(500).json({
+                ok: false,
+                message: 'Se produjo un error con el servidor'
+            })
+        } )
+
 
     } catch (error) {
         console.log(error)
